@@ -55,13 +55,13 @@ All tests are kept in that file and should be maintained as updates are made to 
 
 Errors are returned as JSON objects in the following format:
 
-`
-    {
-        "success": False,
-        "error": 400,
-        "message": "bad request"
-    }
-`
+```
+{
+  "success": False,
+  "error": 400,
+  "message": "bad request"
+}
+```
 
 The API will return three error types:
 - 400: Bad request
@@ -78,7 +78,7 @@ General
     - Results are paginated in groups of 8. Include a request argument to choose page number, starting from 1.
 Sample: curl http://127.0.0.1:5000/categories
 
-`
+```
 {
   "categories": {
     "1": "Science", 
@@ -91,7 +91,7 @@ Sample: curl http://127.0.0.1:5000/categories
   "success": true, 
   "total_categories": 6
 }
-`
+```
 
 #### GET /questions
 
@@ -99,7 +99,7 @@ General
 - Returns a list of questions objects, success value, total number of questions, current category and categories
 - Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1.
 Sample: curl http://127.0.0.1:5000/questions
-`
+```
 {
   "categories": {
     "1": "Science", 
@@ -185,7 +185,7 @@ Sample: curl http://127.0.0.1:5000/questions
   "success": true,
   "total_questions": 20
 }
-`
+```
 
 #### GET /categories/{category_id}/questions
 
@@ -193,7 +193,7 @@ General
 - Returns a list of question objects with a categgory that matches {category_id}, success value, total number of questions returned, current category and categories.
 - The results are paginated in groups of 10. Include a request argument to choose page number starting from 1.
 sample: curl http://12.0.0.1:5000/categories/{category_id}/questions
-`
+```
 {
   "categories": [
     {
@@ -251,7 +251,7 @@ sample: curl http://12.0.0.1:5000/categories/{category_id}/questions
   "success": true,
   "total_questions": 3
 }
-`
+```
 
 #### POST /questions
 
@@ -260,11 +260,11 @@ General
 - Returns a success value.
 sample: curl -X POST -H "Content-Type:application/json" -d '{"question":"Name of the country?", "answer":"South Africa", "difficulty":"3", "category":"3"}' http://localhost:5000/questions
 
-`
+```
 {
   "success": true
 }
-`
+```
 
 #### POST /questions/search
 
@@ -272,7 +272,7 @@ Genereal
 - Returns a list of question objects, success value, and total number of the questions that match a search term.
 - The results are paginated in groups of 10. Include a request argument to choose page number starting from 1.
 sample: curl -X POST -d '{"search":"organ"}' -H "Content-Type:application/json" http://localhost:5000/questions/search
-`
+```
 {
   "current_category": "Sports",
   "questions": [
@@ -287,7 +287,7 @@ sample: curl -X POST -d '{"search":"organ"}' -H "Content-Type:application/json" 
   "success": true,
   "total_questions": 1
 }
-`
+```
 
 #### POST /quizzes
 
@@ -295,7 +295,7 @@ General
 - Returns a random question object and success value
 - It takes a list of previous questions and a category
 sample: curl -X POST -H "Content-Type:application/json" -d '{"quiz_category":{"type":"Science", "id":"1"}}' http://localhost:5000/quizzes
-`
+```
 {
   "success": True,
   "question": 
@@ -307,7 +307,7 @@ sample: curl -X POST -H "Content-Type:application/json" -d '{"quiz_category":{"t
      "difficulty": 4
     }
 }   
-`
+```
 
 #### DELETE /questions/{question_id}
 
@@ -315,11 +315,11 @@ General
 - Deletes the question of the given ID if it exists.
 - Returns the id of the question, and a success value.
 sample: curl -X DELETE http://127.0.0.1:5000/questions/2
-` 
+```
 {
   "success": true
 }    
-`
+```
 
 ## Deployment N/A
 
