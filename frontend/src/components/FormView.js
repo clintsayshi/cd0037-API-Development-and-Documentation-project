@@ -51,6 +51,7 @@ class FormView extends Component {
         return;
       },
       error: (error) => {
+        console.log(error);
         alert('Unable to add question. Please try your request again');
         return;
       },
@@ -72,11 +73,11 @@ class FormView extends Component {
         >
           <label>
             Question
-            <input type='text' name='question' onChange={this.handleChange} />
+            <input type='text' name='question' minLength={5} onChange={this.handleChange} required/>
           </label>
           <label>
             Answer
-            <input type='text' name='answer' onChange={this.handleChange} />
+            <input type='text' name='answer' minLength={3} onChange={this.handleChange} required />
           </label>
           <label>
             Difficulty

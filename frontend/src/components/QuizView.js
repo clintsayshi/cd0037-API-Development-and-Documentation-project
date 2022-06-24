@@ -24,6 +24,7 @@ class QuizView extends Component {
       url: `/categories`, //TODO: update request URL
       type: 'GET',
       success: (result) => {
+        console.log(result);
         this.setState({ categories: result.categories });
         return;
       },
@@ -62,6 +63,7 @@ class QuizView extends Component {
       },
       crossDomain: true,
       success: (result) => {
+        console.log(result)
         this.setState({
           showAnswer: false,
           previousQuestions: previousQuestions,
