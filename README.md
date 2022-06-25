@@ -74,10 +74,14 @@ The API will return three error types:
 #### GET /categories
 
 General
-    - Returns a list of category objects, success value, and total number of categories
-    - Results are paginated in groups of 8. Include a request argument to choose page number, starting from 1.
-Sample: curl http://127.0.0.1:5000/categories
+- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
+- Request Arguments: None
+- Returns an object with the keys:
+  - categories, that contains an object of id: category_string key: value pairs.
+  - success, that contains a boolean value
+  - total_categories, that contains total number of categories returned
 
+Sample: curl http://127.0.0.1:5000/categories
 ```
 {
   "categories": {
@@ -96,8 +100,16 @@ Sample: curl http://127.0.0.1:5000/categories
 #### GET /questions
 
 General
-- Returns a list of questions objects, success value, total number of questions, current category and categories
-- Results are paginated in groups of 10. Include a request argument to choose page number, starting from 1.
+- Fetches a list of question objects
+- Request Arguments: page(optional), to choose page number starting from 1
+- Returns an object with the keys:
+  - `success`, that contains a boolean value
+  - `categories`, that contains an object of `id: category_string` key: value pairs.
+  - `questions`, that contains a list of question objects
+  - `current_category`, a category name
+  - `total_questions`, that contains total number of questions returned
+- The results are paginated in groups of 10. Include a request argument to choose page number starting from 1.
+
 Sample: curl http://127.0.0.1:5000/questions
 ```
 {
@@ -190,8 +202,16 @@ Sample: curl http://127.0.0.1:5000/questions
 #### GET /categories/{category_id}/questions
 
 General
-- Returns a list of question objects with a categgory that matches {category_id}, success value, total number of questions returned, current category and categories.
+- Fetches a list of question objects with a category that matches `category_id`
+- Request Arguments: page(optional), to choose page number starting from 1
+- Returns an object with the keys:
+  - `success`, that contains a boolean value
+  - `categories`, that contains an object of `id: category_string` key: value pairs.
+  - `questions`, that contains a list of question objects
+  - `current_category`, that contains a category dictionary of the current category
+  - `total_questions`, that contains total number of questions returned
 - The results are paginated in groups of 10. Include a request argument to choose page number starting from 1.
+
 sample: curl http://12.0.0.1:5000/categories/{category_id}/questions
 ```
 {
@@ -257,7 +277,9 @@ sample: curl http://12.0.0.1:5000/categories/{category_id}/questions
 
 General
 - Adds a new question using the submitted question, answer, difficulty, and category.
-- Returns a success value.
+- Request Arguments: None
+- Returns an object with a single key `success`
+
 sample: curl -X POST -H "Content-Type:application/json" -d '{"question":"Name of the country?", "answer":"South Africa", "difficulty":"3", "category":"3"}' http://localhost:5000/questions
 
 ```
@@ -269,8 +291,16 @@ sample: curl -X POST -H "Content-Type:application/json" -d '{"question":"Name of
 #### POST /questions/search
 
 Genereal
-- Returns a list of question objects, success value, and total number of the questions that match a search term.
+- Fetches a list of question objects with a question that matches the submitted search query
+- Request Arguments: None
+- Returns an object with the keys:
+  - `success`, that contains a boolean value
+  - `categories`, that contains an object of `id: category_string` key: value pairs.
+  - `questions`, that contains a list of question objects returned
+  - `current_category`, that contains a name of a random category
+  - `total_questions`, that contains total number of questions returned
 - The results are paginated in groups of 10. Include a request argument to choose page number starting from 1.
+
 sample: curl -X POST -d '{"search":"organ"}' -H "Content-Type:application/json" http://localhost:5000/questions/search
 ```
 {
@@ -292,8 +322,13 @@ sample: curl -X POST -d '{"search":"organ"}' -H "Content-Type:application/json" 
 #### POST /quizzes
 
 General
-- Returns a random question object and success value
-- It takes a list of previous questions and a category
+- Fetches a random question object with a given category or any of the categories
+- It takes a list of previous questions(may be an empty list) and an optional category object
+- Request Arguments: None
+- Returns an object with the keys:
+  - `success`, that contains a boolean value
+  - `question`, that contains a question object returned
+
 sample: curl -X POST -H "Content-Type:application/json" -d '{"quiz_category":{"type":"Science", "id":"1"}}' http://localhost:5000/quizzes
 ```
 {
@@ -313,7 +348,9 @@ sample: curl -X POST -H "Content-Type:application/json" -d '{"quiz_category":{"t
 
 General
 - Deletes the question of the given ID if it exists.
-- Returns the id of the question, and a success value.
+- Request Arguments: id of the selected question
+- Returns an object with a single key `success`, that contains a boolean value
+
 sample: curl -X DELETE http://127.0.0.1:5000/questions/2
 ```
 {
