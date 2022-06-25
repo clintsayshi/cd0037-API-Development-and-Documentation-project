@@ -192,7 +192,7 @@ Sample: curl http://127.0.0.1:5000/questions
 }
 ```
 
-#### GET '/categories/${id}/questions?page=${integer}'
+#### GET '/categories/${id}/questions'
 
 - Fetches questions for a cateogry specified by id request argument
 - Request Arguments: id - integer and page - integer
@@ -259,7 +259,7 @@ sample: curl http://12.0.0.1:5000/categories/{category_id}/questions
 }
 ```
 
-#### POST /questions
+#### POST '/questions'
 
 General
 - Sends a post request in order to add a new question.

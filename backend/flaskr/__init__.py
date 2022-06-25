@@ -57,7 +57,6 @@ def create_app(test_config=None):
             'total_categories': len(Category.query.all())
         })
 
-
     """
     Create an endpoint to handle GET requests for questions,
     including pagination (every 10 questions).
@@ -98,7 +97,7 @@ def create_app(test_config=None):
                 'success': True
                 })  
         except:
-            abort(422)
+            abort(404)
         
         
     # An endpoint to POST a new question
@@ -110,6 +109,9 @@ def create_app(test_config=None):
         answer = body.get("answer", None)
         difficulty = body.get("difficulty", None)
         category = body.get("category", None)
+
+        if question is None or answer is None:
+            abort(422)
         
         try:
             q = Question(
@@ -173,7 +175,6 @@ def create_app(test_config=None):
     def quizzes ():
         try:
             body = request.get_json()
-
             previous_questions = body.get("previous_questions", [])
             quiz_category = body.get("quiz_category", 0)
 
