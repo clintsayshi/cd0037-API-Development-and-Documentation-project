@@ -31,7 +31,8 @@ def create_app(test_config=None):
     """
     Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
     """
-    CORS(app, resources={r"*/*": {"origins": "*"}})
+    #CORS(app, resources={r"*/*": {"origins": "*"}})
+    CORS(app)
 
     # The after_request decorator to set Access-Control-Allow
     @app.after_request
@@ -143,35 +144,31 @@ def create_app(test_config=None):
             'current_category': 'Sports',
         })
     
-    # GET endpoint to get questions based on category.
-    @app.route("/categories/<category_id>/questions", methods=["GET"])
+    # A GET endpoint to get questions based on category.
+    @app.route("/categories/<int:category_id>/questions", methods=["GET"])
     def questions_by_category(category_id):
-        try:
-            current_category = Category.query.filter(Category.id == category_id).one_or_none()
+        current_category = Category.query.filter(Category.id == category_id).one_or_none()
+        if current_category is None:
+            abort(404)
+        else:
+            try:
+                select_questions = Question.query.order_by(Question.id).filter(Question.category==category_id).all()
+                current_questions = paginate_questions(request, select_questions)
 
-            if current_category is None:
+                select_categories = Category.query.order_by(Category.id).all()
+                categories = [cat.format() for cat in select_categories]
+
+                return jsonify({
+                    'success': True,
+                    'questions': current_questions,
+                    'total_questions': len(select_questions),
+                    'current_category': current_category.format(),
+                    'categories': categories
+                })
+            except:
                 abort(404)
 
-            select_questions = Question.query.order_by(Question.id).filter(Question.category==category_id).all()
-            current_questions = paginate_questions(request, select_questions)
-
-            select_categories = Category.query.order_by(Category.id).all()
-            categories = [cat.format() for cat in select_categories]
-
-            return jsonify({
-                'success': True,
-                'questions': current_questions,
-                'total_questions': len(select_questions),
-                'current_category': current_category.format(),
-                'categories': categories
-            })
-        except:
-            abort(404)
-
-    """ 
-    Create a POST endpoint to get questions to play the quiz.
-    """
-
+    # A POST endpoint to get questions to play the quiz.
     @app.route("/quizzes", methods=["POST"])
     def quizzes ():
         try:
