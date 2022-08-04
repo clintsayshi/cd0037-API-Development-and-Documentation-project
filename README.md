@@ -358,4 +358,4 @@ sample: curl -X DELETE http://127.0.0.1:5000/questions/2
 Clinton Manakane
 
 ## Acknowledgements 
-The ALX fullstack chat on slack
+The ALX fullstack students(including: Iroatu Prince, Adebajo Oluwadamilola) on slack

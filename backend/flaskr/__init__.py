@@ -63,18 +63,22 @@ def create_app(test_config=None):
     """
     @app.route("/questions")
     def get_questions():
-        select_questions = Question.query.order_by(Question.id).all()
-        current_questions = paginate_questions(request, select_questions)
+        items_limit = request.args.get('limit', 10, type=int)
+        selected_page = request.args.get('page', 1, type=int)
+        current_index = selected_page - 1
+
+        select_questions = Question.query.order_by(Question.id).limit(items_limit).offset(current_index * items_limit).all()
+        questions = [q.format() for q in select_questions]
 
         select_categories = Category.query.order_by(Category.id).all()
         categories = {cat.id:cat.type for cat in select_categories}
 
-        if len(current_questions) == 0:
+        if len(questions) == 0:
             abort(404)
 
         response = jsonify({
             'success': True,
-            'questions': current_questions,
+            'questions': questions,
             'total_questions': len(Question.query.all()),
             'current_category': 'Sports',
             'categories': categories
@@ -97,7 +101,7 @@ def create_app(test_config=None):
                 'success': True
                 })  
         except:
-            abort(404)
+            abort(422)
         
         
     # An endpoint to POST a new question
@@ -110,7 +114,7 @@ def create_app(test_config=None):
         difficulty = body.get("difficulty", None)
         category = body.get("category", None)
 
-        if question is None or answer is None:
+        if question is None or answer is None or difficulty is None or category is None:
             abort(422)
         
         try:
@@ -149,25 +153,35 @@ def create_app(test_config=None):
     # A GET endpoint to get questions based on category.
     @app.route("/categories/<int:category_id>/questions", methods=["GET"])
     def questions_by_category(category_id):
+        items_limit = request.args.get('limit', 10, type=int)
+        selected_page = request.args.get('page', 1, type=int)
+        current_index = selected_page - 1
+
         current_category = Category.query.filter(Category.id == category_id).one_or_none()
+
         if current_category is None:
             abort(404)
         else:
             try:
-                select_questions = Question.query.order_by(Question.id).filter(Question.category==category_id).all()
-                current_questions = paginate_questions(request, select_questions)
+                select_questions = Question.query.order_by(Question.id).filter(Question.category==category_id).limit(items_limit).offset(current_index * items_limit).all()
+                
+                questions = [q.format() for q in select_questions]
+
+                if len(questions) == 0:
+                    abort(404)
 
                 select_categories = Category.query.order_by(Category.id).all()
                 categories = [cat.format() for cat in select_categories]
 
                 return jsonify({
                     'success': True,
-                    'questions': current_questions,
-                    'total_questions': len(select_questions),
+                    'questions': questions,
+                    'total_questions': len(questions),
                     'current_category': current_category.format(),
                     'categories': categories
                 })
             except:
+                print(sys.exc_info())
                 abort(404)
 
     # A POST endpoint to get questions to play the quiz.
